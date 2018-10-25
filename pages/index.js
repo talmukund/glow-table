@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import BootstrapTable from 'react-bootstrap-table-next';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
@@ -8,6 +9,7 @@ import Layout from '../components/Layout'
 
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
+const { SearchBar } = Search;
 class App extends Component {
     state = {
         table_data: [{
@@ -169,10 +171,25 @@ class App extends Component {
             filter: textFilter()
         }];
         return (
+
             <Layout title="Glow Table"><div>
-                <BootstrapTable bootstrap4 keyField='id' data={this.state.table_data} columns={columns} pagination={paginationFactory(options)} filter={filterFactory()} striped
-                    hover
-                    condensed />
+                <ToolkitProvider
+                    keyField='id' data={this.state.table_data} columns={columns}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <SearchBar {...props.searchProps} style={{ width: '20%', float: "right", margin: "30px" }} />
+
+                                <BootstrapTable bootstrap4 {...props.baseProps} pagination={paginationFactory(options)} filter={filterFactory()} striped
+                                    hover
+                                    condensed />
+                            </div>
+                        )
+                    }
+                </ToolkitProvider>
+
             </div></Layout>
 
         )
